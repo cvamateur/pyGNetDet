@@ -20,10 +20,16 @@ python3 -m compileall ./
 
 **Examples:**
 
-- **Run detection on single image:**
+- **Run detection on image:**
 
   - ```shell
-    python3 GNetDet.py image --model=vehicle.model --input=test.jpg
+    python3 GNetDet.py image --model=vehicle.model --input=test/imgs/test.jpg
+    
+    # If input is a directory, then detect all images under this directory
+    python3 GNetDet.py image --model=vehicle.model --input=test/imgs
+    
+    # If output path is given, then all results will be saved
+    python3 GNetDet.py image --model=vehicle.model --input=test/imgs --output=test/results
     ```
 
 - **Run detection on video:**
