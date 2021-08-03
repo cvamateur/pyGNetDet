@@ -26,7 +26,7 @@ def _check_path_is_valid_type_of(valid_exts: List[str], path: str):
     return ext in valid_exts
 
 
-def _get_files(directory: str, pred: Optional[Callable[[str], bool]] = None, recursive=True):
+def _get_files(directory: str, pred: Optional[Callable[[str], bool]] = None, recursive: Optional[bool] = True):
     paths = []
     if recursive:
         for root, _, files in os.walk(directory):
@@ -72,7 +72,7 @@ class Config(object):
     """Config class to parse yaml files."""
     _instance = False
 
-    def __new__(cls, arg):
+    def __new__(cls, arg: Any):
         if isinstance(arg, MutableMapping):
             return super().__new__(cls)
         elif isinstance(arg, MutableSequence):
@@ -80,34 +80,34 @@ class Config(object):
         else:
             return arg
 
-    def __init__(self, mapping: Dict[str, Any]):
+    def __init__(self, mapping: MutableMapping[str, Any]):
         _check_keys_are_all_valid(mapping)
         self._c = mapping
         self._instance = True
 
-    def __getattr__(self, key):
+    def __getattr__(self, key: str):
         if not self._instance:
-            return super(Config, self).__getattribute__(key)
+            return super().__getattribute__(key)
         if hasattr(self._c, key):
             return getattr(self._c, key)
         else:
             return self.__class__(self._c[key])
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any):
         if not self._instance:
-            return super(Config, self).__setattr__(key, value)
+            return super().__setattr__(key, value)
         if hasattr(self._c, key):
             print(f"[ERROR] Invalid key: {key}")
             sys.exit(-1)
         else:
             self._c[key] = value
 
-    def __repr__(self, depth=0):
+    def __repr__(self, depth: Optional[int] = 0):
         s = "====== Configurations ======\n" if not depth else ""
         for k, v in self._c.items():
             s += "  " * depth
-            if isinstance(v, Dict):
-                s += f"{k}:\n{self.__class__(self._c[k]).__repr__(depth + 1)}"
+            if isinstance(v, MutableMapping):
+                s += f"{k}:\n{self.__class__(v).__repr__(depth + 1)}"
             else:
                 s += f"{k}:  {reprlib.repr(v)}\n"
         s += "===========================\n" if not depth else ""
@@ -266,7 +266,7 @@ def get_config():
                 libgtisdk = os.path.abspath(lib[0])
                 break
     except Exception as e:
-        print(f"[WARNING] Some error occur during loading files from : {path}")
+        print(f"[WARNING] Some errors occur when loading files from : {path}")
         print(f"[WARNING] {e}")
     finally:
         _assert_with_msg_or_exit(bool(libgtisdk), f"[ERROR] `libGTILibrary.so` does not found!")
