@@ -50,7 +50,7 @@ python3 -m compileall ./
 - **-i/--input** 
   - Path of input source. REQUIRED  if detection type is  **image** or **video**.
      - Could be a specific file path, eg. `./test.jpg`;
-     - Or a directory. In such case all *images* or *video* under the directory will be detected.
+     - Or a directory. In such case all *images* or *videos* under the directory will be detected.
 - **-o/--output**
      - Path to output.  Currently only usefull if *type* is *image*.
      - Could be a specific file path, eg. `./out-test.jpg`. Avoid duplicated name as input.
