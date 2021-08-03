@@ -263,7 +263,7 @@ def get_config():
         for path in [".", *filter(lambda p: bool(p), os.environ.get("LD_LIBRARY_PATH", "").split(':'))]:
             lib = _get_files(path, lambda p: os.path.basename(p) == "libGTILibrary.so")
             if lib:
-                libgtisdk = lib[0]
+                libgtisdk = os.path.abspath(lib[0])
                 break
     except Exception as e:
         print(f"[WARNING] Some error occur during loading files from : {path}")
