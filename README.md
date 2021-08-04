@@ -5,7 +5,7 @@
 **Requirments：**
 
 ```shell
-pip install numpy opencv-python pyyaml
+pip install opencv-python pyyaml
 ```
 
    
