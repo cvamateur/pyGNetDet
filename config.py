@@ -9,10 +9,11 @@ from typing import List, Dict, Any, MutableMapping, MutableSequence, Callable, O
 
 __all__ = ["Config", "get_config"]
 
-VALID_CHIPS: List[str] = ["5801", "SIT501"]
-VALID_DET_TYPE: List[str] = ["camara", "image", "video"]
-VALID_IMG_EXT: List[str] = [".jpg", ".jpeg", ".png"]
-VALID_VID_EXT: List[str] = [".mp4", ".avi"]
+
+VALID_CHIPS     : List[str] = ["5801", "SIT501"]
+VALID_DET_TYPE  : List[str] = ["camara", "image", "video"]
+VALID_IMG_EXT   : List[str] = [".jpg", ".jpeg", ".png"]
+VALID_VID_EXT   : List[str] = [".mp4", ".avi"]
 
 
 def _assert_with_msg_or_exit(assertion: bool, msg: str):
@@ -31,12 +32,12 @@ def _get_files(directory: str, pred: Optional[Callable[[str], bool]] = None, rec
     if recursive:
         for root, _, files in os.walk(directory):
             for file in files:
-                if pred is not None and not pred(file):
+                if pred is not None and callable(pred) and not pred(file):
                     continue
                 paths.append(os.path.join(root, file))
     else:
         for file in os.listdir(directory):
-            if pred is not None and not pred(file):
+            if pred is not None and callable(pred) and not pred(file):
                 continue
             paths.append(os.path.join(directory, file))
     return paths
@@ -91,6 +92,7 @@ class Config(object):
         if hasattr(self._c, key):
             return getattr(self._c, key)
         else:
+            _assert_with_msg_or_exit(key in self._c, f"[ERROR] `{key}` not in cfg, current keys: {list(self._c.keys())}")
             return self.__class__(self._c[key])
 
     def __setattr__(self, key: str, value: Any):
@@ -176,7 +178,7 @@ def get_config():
                         "--fancy",
                         action="store_true",
                         default=False,
-                        help="If present, drawing bounding boxes are replaced by bounding corners.")
+                        help="If present, drawing fancier bounding boxes.")
 
     args = parser.parse_args()
 
