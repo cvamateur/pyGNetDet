@@ -5,12 +5,12 @@
 **Requirments：**
 
 ```shell
-pip install numpy opencv-python pyyaml
+pip install opencv-python pyyaml
 ```
 
    
 
-**Compile [Optinal]：**
+**Compile [Optional]：**
 
 ```shell
 python3 -m compileall ./
